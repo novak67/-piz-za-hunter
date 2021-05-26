@@ -15,6 +15,7 @@
 		84644E0A265D4FD900F88EA9 /* _piz_za_hunter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84644E08265D4FD900F88EA9 /* _piz_za_hunter.xcdatamodeld */; };
 		84644E15265D4FDA00F88EA9 /* _piz_za_hunterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84644E14265D4FDA00F88EA9 /* _piz_za_hunterTests.swift */; };
 		84644E20265D4FDA00F88EA9 /* _piz_za_hunterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84644E1F265D4FDA00F88EA9 /* _piz_za_hunterUITests.swift */; };
+		84D6C809265D5AF3008AE659 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D6C808265D5AF3008AE659 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		84644E1B265D4FDA00F88EA9 /* (piz)za hunterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "(piz)za hunterUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84644E1F265D4FDA00F88EA9 /* _piz_za_hunterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _piz_za_hunterUITests.swift; sourceTree = "<group>"; };
 		84644E21265D4FDA00F88EA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84D6C808265D5AF3008AE659 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 			children = (
 				84644DFD265D4FD600F88EA9 /* _piz_za_hunterApp.swift */,
 				84644DFF265D4FD600F88EA9 /* ContentView.swift */,
+				84D6C808265D5AF3008AE659 /* LocationManager.swift */,
 				84644E01265D4FD900F88EA9 /* Assets.xcassets */,
 				84644E06265D4FD900F88EA9 /* Persistence.swift */,
 				84644E0B265D4FD900F88EA9 /* Info.plist */,
@@ -267,6 +270,7 @@
 			files = (
 				84644E0A265D4FD900F88EA9 /* _piz_za_hunter.xcdatamodeld in Sources */,
 				84644E07265D4FD900F88EA9 /* Persistence.swift in Sources */,
+				84D6C809265D5AF3008AE659 /* LocationManager.swift in Sources */,
 				84644E00265D4FD600F88EA9 /* ContentView.swift in Sources */,
 				84644DFE265D4FD600F88EA9 /* _piz_za_hunterApp.swift in Sources */,
 			);

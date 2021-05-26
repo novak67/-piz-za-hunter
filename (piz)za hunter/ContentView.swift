@@ -2,79 +2,83 @@
 //  ContentView.swift
 //  (piz)za hunter
 //
-//  Created by ryan b on 5/25/21.
+//  Created by ryan b on 5/19/21.
 //
 
 import SwiftUI
+import MapKit
 import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
+    
+    @StateObject var locationManager = LocationManager()
+    
+    @State private var userTrackingMode: MapUserTrackingMode = .follow
+    
+    @State private var region = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(
+            latitude: 42.15704,
+            longitude: -88.14812),
+        span: MKCoordinateSpan(
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05)
+    )
+    
+    @State private var places = [Place]()
+    
     var body: some View {
-        List {
-            ForEach(items) { item in
-                Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-            }
-            .onDelete(perform: deleteItems)
-        }
-        .toolbar {
-            #if os(iOS)
-            EditButton()
-            #endif
-
-            Button(action: addItem) {
-                Label("Add Item", systemImage: "plus")
+        Map(
+            coordinateRegion: $region,
+            interactionModes: .all,
+            showsUserLocation: true,
+            userTrackingMode: $userTrackingMode,
+            annotationItems: places) { place in
+            MapAnnotation(coordinate: place.annotation.coordinate) {
+                Marker(mapItem: place.mapItem)
             }
         }
+        .onAppear(perform: {
+            performSearch(item: "Pizza")
+        })
     }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+    
+    func performSearch(item: String) {
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = item
+        searchRequest.region = region
+        let search = MKLocalSearch(request: searchRequest)
+        search.start { (response, error) in
+            if let response = response {
+                for mapItem in response.mapItems {
+                    let annotation = MKPointAnnotation()
+                    annotation.coordinate = mapItem.placemark.coordinate
+                    annotation.title = mapItem.name
+                    places.append(Place(annotation: annotation, mapItem: mapItem))
+                }
             }
         }
     }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView()
+    }
+}
+
+struct Place: Identifiable {
+    let id = UUID()
+    let annotation: MKPointAnnotation
+    let mapItem: MKMapItem
+}
+
+struct Marker: View {
+    var mapItem: MKMapItem
+    var body: some View {
+        if let url = mapItem.url {
+            Link(destination: url, label: {
+                Image("pizza")
+            })
+        }
     }
 }
